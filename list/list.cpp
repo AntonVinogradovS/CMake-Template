@@ -1,145 +1,183 @@
-#include "list.h"
+п»ї#include "list.h"
 
 Node::Node(DataType d, Node* n) : data(d), next(n) {
 }
 
 Node::Node(const Node& node2) {
-  data = node2.data;
+    data = node2.data;
 }
 
 bool Node::operator==(const Node& node2) const {
-  return (data == node2.data);
-}
+    return (data == node2.data);
+} 
 
 List::List() {
-  head = nullptr;
+    head = nullptr;
 }
 
 
 
 List::~List() {
-  Node* tmp, *tmp1; // указатель-ходилка
-  tmp = head;
-  tmp1 = tmp;
-  while (tmp1 != nullptr)
-  {
-    tmp1 = tmp->next;
-    delete tmp;
-    tmp = tmp1;
-  }
+    Node* tmp, * tmp1; // ГіГЄГ Г§Г ГІГҐГ«Гј-ГµГ®Г¤ГЁГ«ГЄГ 
+    tmp = head;
+    tmp1 = tmp;
+    while (tmp1 != nullptr)
+    {
+        tmp1 = tmp->next;
+        delete tmp;
+        tmp = tmp1;
+    }
 }
 
 
 void List::InsertToHead(const DataType& d)
 {
-  if (isEmpty())
-  {
-    head = new Node(d, nullptr); // это первый и единственный
-  }
-  else
-  {
-    head = new Node(d, head);
-  }
+    if (isEmpty())
+    {
+        head = new Node(d, nullptr); // ГЅГІГ® ГЇГҐГ°ГўГ»Г© ГЁ ГҐГ¤ГЁГ­Г±ГІГўГҐГ­Г­Г»Г©
+    }
+    else
+    {
+        head = new Node(d, head);
+    }
+}
+void List::DeleteToTail()
+{
+    bool flag = true;
+    if (isEmpty()) 
+    {
+        cout << "РџСѓСЃС‚РѕР№ СЃС‚РµРє";
+        throw "Err";
+    }
+    else
+    {
+        Node* tmp;
+        tmp = head;
+        Node* tmp2;
+        tmp2 = head;
+        tmp2 = tmp2->next;
+        if (head->next == nullptr) {
+            delete head;
+            head = nullptr;
+        }
+        else
+        {
+            while (tmp->next != nullptr && flag == true) {
+
+                if (tmp2->next != nullptr) {
+                    tmp = tmp->next;
+                   tmp2 = tmp2->next;
+                   
+                }
+                else {
+                    flag = false;
+                }
+              
+            }
+            tmp->next = nullptr;
+        }
+    }
 }
 
 void List::InsertToTail(const DataType& d)
 {
-  if (isEmpty())
-  {
-    head = new Node(d, nullptr); // это первый и единственный
-  }
-  else
-  {
-    Node* p = new Node(d, nullptr);
-    Node* tmp; // указатель-ходилка
-    tmp = head;
-    while (tmp->next != nullptr)
+    if (isEmpty())
     {
-      tmp = tmp->next;
+        head = new Node(d, nullptr); // ГЅГІГ® ГЇГҐГ°ГўГ»Г© ГЁ ГҐГ¤ГЁГ­Г±ГІГўГҐГ­Г­Г»Г©
     }
-    // в итоге - tmp - последний
-    tmp->next = p;
-  }
+    else
+    {
+        Node* p = new Node(d, nullptr);
+        Node* tmp; // ГіГЄГ Г§Г ГІГҐГ«Гј-ГµГ®Г¤ГЁГ«ГЄГ 
+        tmp = head;
+        while (tmp->next != nullptr)
+        {
+            tmp = tmp->next;
+        }
+        // Гў ГЁГІГ®ГЈГҐ - tmp - ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ©
+        tmp->next = p;
+    }
 }
 
 void List::Clean()
 {
-  Node* tmp;
-  if (isEmpty())
-    return;
+    Node* tmp;
+    if (isEmpty())
+        return;
 
-  while (head->next != nullptr)
-  {
-    tmp = head->next;
-    head->next = tmp->next; // head->next->next;
-    delete tmp;
-  }
-  delete head;
-  head = nullptr;
+    while (head->next != nullptr)
+    {
+        tmp = head->next;
+        head->next = tmp->next; // head->next->next;
+        delete tmp;
+    }
+    delete head;
+    head = nullptr;
 }
 
 void List::Delete(const DataType& d)
 {
-  // найти значение
-  // найти того, кто перед ним
-  Node* prev = head;
-  Node* tmp;
-  bool find = false;
+    // Г­Г Г©ГІГЁ Г§Г­Г Г·ГҐГ­ГЁГҐ
+    // Г­Г Г©ГІГЁ ГІГ®ГЈГ®, ГЄГІГ® ГЇГҐГ°ГҐГ¤ Г­ГЁГ¬
+    Node* prev = head;
+    Node* tmp;
+    bool find = false;
 
-  // данные в голове
-  if (head->data == d)
-  {
-    head = head->next;
-    delete prev; // сейчас это голова
-    find = true;
-  }
-
-  while (!find && (prev->next != nullptr))
-  {
-    if (prev->next->data == d)
+    // Г¤Г Г­Г­Г»ГҐ Гў ГЈГ®Г«Г®ГўГҐ
+    if (head->data == d)
     {
-      // prev->next - это звено
-      tmp = prev->next;
-      prev->next = prev->next->next; // tmp->next
-      delete tmp;
-      find = true;
+        head = head->next;
+        delete prev; // Г±ГҐГ©Г·Г Г± ГЅГІГ® ГЈГ®Г«Г®ГўГ 
+        find = true;
     }
-    else
-      prev = prev->next;
-  }
+
+    while (!find && (prev->next != nullptr))
+    {
+        if (prev->next->data == d)
+        {
+            // prev->next - ГЅГІГ® Г§ГўГҐГ­Г®
+            tmp = prev->next;
+            prev->next = prev->next->next; // tmp->next
+            delete tmp;
+            find = true;
+        }
+        else
+            prev = prev->next;
+    }
 }
 
 
 List::List(DataType* arr, int size) {
-  if (arr != nullptr) {
-    head = new Node(arr[0], nullptr);
-    Node* tmp = head;                              // указатель на начало НИКОГДА не используем для движения по списку!!!!
-    for (int i = 1; i < size; i++) {
-      Node* elem = new Node(arr[i], nullptr);      // создаём звено
-      tmp->next = elem;                            // цепляем его
-      tmp = tmp->next;                             // сдвигаем временный указатель
+    if (arr != nullptr) {
+        head = new Node(arr[0], nullptr);
+        Node* tmp = head;                              // ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  Г­Г Г·Г Г«Г® ГЌГ€ГЉГЋГѓГ„ГЂ Г­ГҐ ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГ¬ Г¤Г«Гї Г¤ГўГЁГ¦ГҐГ­ГЁГї ГЇГ® Г±ГЇГЁГ±ГЄГі!!!!
+        for (int i = 1; i < size; i++) {
+            Node* elem = new Node(arr[i], nullptr);      // Г±Г®Г§Г¤Г ВёГ¬ Г§ГўГҐГ­Г®
+            tmp->next = elem;                            // Г¶ГҐГЇГ«ГїГҐГ¬ ГҐГЈГ®
+            tmp = tmp->next;                             // Г±Г¤ГўГЁГЈГ ГҐГ¬ ГўГ°ГҐГ¬ГҐГ­Г­Г»Г© ГіГЄГ Г§Г ГІГҐГ«Гј
+        }
     }
-  } else {
-    throw std::exception("Empty Input Data!");
-  }
+    else {
+        throw std::exception("Empty Input Data!");
+    }
 }
 
 void List::DeleteHead() {
-  if (!isEmpty()) {
-    Node* tmp = head;
-    head = head->next;
-    delete tmp;
-  }
+    if (!isEmpty()) {
+        Node* tmp = head;
+        head = head->next;
+        delete tmp;
+    }
 }
 
-void List::print(char* direction = "->") {    // найти другой способ фикса
-  if (!isEmpty()) {
-    Node* tmp = head;
-    while (tmp->next != nullptr) {
-      std::cout << "(" << tmp->data << ")" << direction;                   // (1)->(3)->(2)->
-      tmp = tmp->next;                                                     // сдвигаем временный указатель
-    } 
-    std::cout << "(" << tmp->data << ")" << direction;
-  }
-  std::cout << "NULL" << std::endl;                                        // (1)->(3)->(2)->NULL
+void List::print(char* direction = "->") {    // Г­Г Г©ГІГЁ Г¤Г°ГіГЈГ®Г© Г±ГЇГ®Г±Г®ГЎ ГґГЁГЄГ±Г 
+    if (!isEmpty()) {
+        Node* tmp = head;
+        while (tmp->next != nullptr) {
+            std::cout << "(" << tmp->data << ")" << direction;                   // (1)->(3)->(2)->
+            tmp = tmp->next;                                                     // Г±Г¤ГўГЁГЈГ ГҐГ¬ ГўГ°ГҐГ¬ГҐГ­Г­Г»Г© ГіГЄГ Г§Г ГІГҐГ«Гј
+        }
+        std::cout << "(" << tmp->data << ")" << direction;
+    }
+    std::cout << "NULL" << std::endl;                                        // (1)->(3)->(2)->NULL
 }

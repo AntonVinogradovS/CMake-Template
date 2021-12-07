@@ -45,6 +45,7 @@ public:
   ~List();
 
   void InsertToHead(const DataType& d);             // вставить элемент d первым
+  void DeleteToTail();
   void InsertToTail(const DataType& d);             // вставить элемент d последним
 
   void Clean();                                     // удалить все звенья  
